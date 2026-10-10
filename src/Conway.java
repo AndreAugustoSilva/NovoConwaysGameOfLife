@@ -16,7 +16,6 @@ public class Conway {
         do{
             tabuleiro = reorganizarTabuleiro(tabuleiro);
             tudoVazio = checarVazio(tabuleiro);
-
             mostrarTabuleiro(tabuleiro);
             Thread.sleep(100);
         } while(tudoVazio == false);
@@ -27,37 +26,6 @@ public class Conway {
             for(int contadorColuna = 0; contadorColuna < tabuleiro.length; contadorColuna++) {
                 int contagemCasasVizinhas = 0;
 
-                contarVizinhos(tabuleiro);
-
-                if(tabuleiro[contadorLinha][contadorColuna] == 0) {
-                    if(contagemCasasVizinhas == 3) {
-                        tabuleiro[contadorLinha][contadorColuna] = 2;
-                    }
-                } else {
-                    if(contagemCasasVizinhas < 2 || contagemCasasVizinhas > 3) {
-                        tabuleiro[contadorLinha][contadorColuna] = 3;
-                    }
-                }
-            }
-        }
-
-        for(int contadorLinha = 0; contadorLinha < tabuleiro.length; contadorLinha++) {
-            for(int contadorColuna = 0; contadorColuna < tabuleiro.length; contadorColuna++) {
-                if(tabuleiro[contadorLinha][contadorColuna] == 3) {
-                    tabuleiro[contadorLinha][contadorColuna] = 0;
-                } else if(tabuleiro[contadorLinha][contadorColuna] == 2) {
-                    tabuleiro[contadorLinha][contadorColuna] = 1;
-                }
-            }
-        }
-        return tabuleiro;
-    }
-
-    public int contarVizinhos(int[][] tabuleiro) {
-        int contagemCasasVizinhas = 0;
-
-        for(int contadorLinha = 0; contadorLinha < tabuleiro.length; contadorLinha++) {
-            for(int contadorColuna = 0; contadorColuna < tabuleiro.length; contadorColuna++) {
                 if(contadorColuna - 1 >= 0 && contadorLinha - 1 >= 0 && (tabuleiro[contadorLinha-1][contadorColuna-1] == 1 || tabuleiro[contadorLinha-1][contadorColuna-1] == 3)) {
                     contagemCasasVizinhas++;
                 }
@@ -82,9 +50,30 @@ public class Conway {
                 if(contadorColuna - 1 >= 0 && (tabuleiro[contadorLinha][contadorColuna-1] == 1 || tabuleiro[contadorLinha][contadorColuna-1] == 3)) {
                     contagemCasasVizinhas++;
                 }
+
+                if(tabuleiro[contadorLinha][contadorColuna] == 0) {
+                    if(contagemCasasVizinhas == 3) {
+                        tabuleiro[contadorLinha][contadorColuna] = 2;
+                    }
+                } else {
+                    if(contagemCasasVizinhas < 2 || contagemCasasVizinhas > 3) {
+                        tabuleiro[contadorLinha][contadorColuna] = 3;
+                    }
+                }
             }
         }
-        return contagemCasasVizinhas;
+
+        for(int contadorLinha = 0; contadorLinha < tabuleiro.length; contadorLinha++) {
+            for(int contadorColuna = 0; contadorColuna < tabuleiro.length; contadorColuna++) {
+                if(tabuleiro[contadorLinha][contadorColuna] == 3) {
+                    tabuleiro[contadorLinha][contadorColuna] = 0;
+                } else if(tabuleiro[contadorLinha][contadorColuna] == 2) {
+                    tabuleiro[contadorLinha][contadorColuna] = 1;
+                }
+            }
+        }
+
+        return tabuleiro;
     }
 
     public void mostrarTabuleiro(int[][] tabuleiro) {
@@ -108,6 +97,7 @@ public class Conway {
                 }
             }
         }
+
         return vazio;
     }
 }
