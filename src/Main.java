@@ -9,8 +9,10 @@ public class Main {
         int tamanhoTabuleiro = sc.nextInt();
         System.out.println("Digite a porcentagem de células vivas (1 - 100):");
         double porcentagemCelulasVivas = (sc.nextDouble()/100);
-        
-        conway.comecar(tamanhoTabuleiro, porcentagemCelulasVivas);
+        System.out.println("Digite a taxa de atualização do tabuleiro (em ms, o recomendado é de 50 a 200): ");
+        int taxaAtualizacao = sc.nextInt();
+
+        conway.comecar(tamanhoTabuleiro, porcentagemCelulasVivas, taxaAtualizacao);
 
         sc.close();
     }

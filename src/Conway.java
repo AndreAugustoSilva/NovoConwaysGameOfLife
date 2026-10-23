@@ -1,5 +1,5 @@
 public class Conway {
-    public void comecar(int tamanhoTabuleiro, double porcentagemCelulasVivas) throws Exception {
+    public void comecar(int tamanhoTabuleiro, double porcentagemCelulasVivas, int taxaAtualizacao) throws Exception {
         int[][] tabuleiro = new int[tamanhoTabuleiro][tamanhoTabuleiro];
         boolean tudoVazio = true;
         RegrasConway regras = new RegrasConway();
@@ -19,7 +19,7 @@ public class Conway {
             tabuleiro = reorganizarTabuleiro(tabuleiro, regras);
             tudoVazio = checarVazio(tabuleiro);
             console.mostrarTabuleiro(tabuleiro);
-            Thread.sleep(100);
+            Thread.sleep(taxaAtualizacao);
         } while(tudoVazio == false);
     }
 
@@ -28,7 +28,11 @@ public class Conway {
         
         for(int contadorLinha = 0; contadorLinha < tabuleiro.length; contadorLinha++) {
             for(int contadorColuna = 0; contadorColuna < tabuleiro.length; contadorColuna++) {
-                contadorVizinhos = calcularVizinhos(tabuleiro, contadorLinha, contadorColuna);
+                try {
+                    contadorVizinhos = calcularVizinhos(tabuleiro, contadorLinha, contadorColuna, regras);
+                } catch (CalculoVizinhosException e) {
+                    System.out.println("Erro: " + e);
+                }
                 
                 // Valores temporários para não interferirem na próxima célula
                 if(tabuleiro[contadorLinha][contadorColuna] == 0) {
@@ -71,31 +75,35 @@ public class Conway {
         return vazio;
     }
 
-    public int calcularVizinhos(int[][] tabuleiro, int contadorLinha, int contadorColuna) {
+    public int calcularVizinhos(int[][] tabuleiro, int contadorLinha, int contadorColuna, RegrasConway regras) throws CalculoVizinhosException{
         int contagemCasasVizinhas = 0;
 
-        if(contadorColuna - 1 >= 0 && contadorLinha - 1 >= 0 && (tabuleiro[contadorLinha-1][contadorColuna-1] == 1 || tabuleiro[contadorLinha-1][contadorColuna-1] == 3)) {
+        if((contadorLinha < 0 || contadorLinha > tabuleiro.length) || (contadorColuna < 0 || contadorColuna > tabuleiro.length)) {
+            throw new CalculoVizinhosException("A contagem dos vizinhos de uma célula atingiu coordenadas inválidas. Tente novamente.");
+        }
+
+        if(contadorColuna - 1 >= 0 && (tabuleiro[contadorLinha-1][contadorColuna-1] == 1 || tabuleiro[contadorLinha-1][contadorColuna-1] == regras.getVaiMorrer())) {
             contagemCasasVizinhas++;
         }
-        if(contadorLinha - 1 >= 0 && (tabuleiro[contadorLinha-1][contadorColuna] == 1 || tabuleiro[contadorLinha-1][contadorColuna] == 3)) {
+        if(contadorLinha - 1 >= 0 && (tabuleiro[contadorLinha-1][contadorColuna] == 1 || tabuleiro[contadorLinha-1][contadorColuna] == regras.getVaiMorrer())) {
             contagemCasasVizinhas++;
         }
-        if(contadorLinha - 1 >= 0 && contadorColuna + 1 < tabuleiro.length && (tabuleiro[contadorLinha-1][contadorColuna+1] == 1 || tabuleiro[contadorLinha-1][contadorColuna+1] == 3)) {
+        if(contadorLinha - 1 >= 0 && contadorColuna + 1 < tabuleiro.length && (tabuleiro[contadorLinha-1][contadorColuna+1] == 1 || tabuleiro[contadorLinha-1][contadorColuna+1] == regras.getVaiMorrer())) {
             contagemCasasVizinhas++;
         }
-        if(contadorColuna + 1 < tabuleiro.length && (tabuleiro[contadorLinha][contadorColuna+1] == 1 || tabuleiro[contadorLinha][contadorColuna+1] == 3)) {
+        if(contadorColuna + 1 < tabuleiro.length && (tabuleiro[contadorLinha][contadorColuna+1] == 1 || tabuleiro[contadorLinha][contadorColuna+1] == regras.getVaiMorrer())) {
             contagemCasasVizinhas++;
         }
-        if(contadorLinha + 1 < tabuleiro.length && contadorColuna + 1 < tabuleiro.length && (tabuleiro[contadorLinha+1][contadorColuna+1] == 1 || tabuleiro[contadorLinha+1][contadorColuna+1] == 3)) {
+        if(contadorLinha + 1 < tabuleiro.length && contadorColuna + 1 < tabuleiro.length && (tabuleiro[contadorLinha+1][contadorColuna+1] == 1 || tabuleiro[contadorLinha+1][contadorColuna+1] == regras.getVaiMorrer())) {
             contagemCasasVizinhas++;
         }
-        if(contadorLinha + 1 < tabuleiro.length && (tabuleiro[contadorLinha+1][contadorColuna] == 1 || tabuleiro[contadorLinha+1][contadorColuna] == 3)) {
+        if(contadorLinha + 1 < tabuleiro.length && (tabuleiro[contadorLinha+1][contadorColuna] == 1 || tabuleiro[contadorLinha+1][contadorColuna] == regras.getVaiMorrer())) {
             contagemCasasVizinhas++;
         }
-        if(contadorColuna - 1 >= 0 && contadorLinha + 1 < tabuleiro.length && (tabuleiro[contadorLinha+1][contadorColuna-1] == 1 || tabuleiro[contadorLinha+1][contadorColuna-1] == 3)) {
+        if(contadorColuna - 1 >= 0 && contadorLinha + 1 < tabuleiro.length && (tabuleiro[contadorLinha+1][contadorColuna-1] == 1 || tabuleiro[contadorLinha+1][contadorColuna-1] == regras.getVaiMorrer())) {
             contagemCasasVizinhas++;
         }
-        if(contadorColuna - 1 >= 0 && (tabuleiro[contadorLinha][contadorColuna-1] == 1 || tabuleiro[contadorLinha][contadorColuna-1] == 3)) {
+        if(contadorColuna - 1 >= 0 && (tabuleiro[contadorLinha][contadorColuna-1] == 1 || tabuleiro[contadorLinha][contadorColuna-1] == regras.getVaiMorrer())) {
             contagemCasasVizinhas++;
         }
 
