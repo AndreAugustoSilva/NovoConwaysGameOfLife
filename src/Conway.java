@@ -82,7 +82,29 @@ public class Conway {
             throw new CalculoVizinhosException("A contagem dos vizinhos de uma célula atingiu coordenadas inválidas. Tente novamente.");
         }
 
-        if(contadorColuna - 1 >= 0 && (tabuleiro[contadorLinha-1][contadorColuna-1] == 1 || tabuleiro[contadorLinha-1][contadorColuna-1] == regras.getVaiMorrer())) {
+        for(int checagemColuna = -1; checagemColuna < 2; checagemColuna++) {
+            for(int checagemLinha = -1; checagemLinha < 2; checagemLinha++) {
+                int linhaVizinho = contadorLinha+checagemLinha;
+                int colunaVizinho = contadorColuna+checagemColuna;
+
+                if(checagemLinha == 0 && checagemColuna == 0) {
+                    continue;
+                }
+
+                if((linhaVizinho >= 0 && linhaVizinho < tabuleiro.length) && (colunaVizinho >= 0 && colunaVizinho < tabuleiro.length)) {
+                    if(tabuleiro[linhaVizinho][colunaVizinho] == 1 || tabuleiro[linhaVizinho][colunaVizinho] == regras.getVaiMorrer()) {
+                        contagemCasasVizinhas++;
+                    }
+                }
+            }
+        }
+
+        return contagemCasasVizinhas;
+    }
+}
+
+/*
+        if(contadorColuna - 1 >= 0 && contadorLinha - 1 >= 0 && (tabuleiro[contadorLinha-1][contadorColuna-1] == 1 || tabuleiro[contadorLinha-1][contadorColuna-1] == regras.getVaiMorrer())) {
             contagemCasasVizinhas++;
         }
         if(contadorLinha - 1 >= 0 && (tabuleiro[contadorLinha-1][contadorColuna] == 1 || tabuleiro[contadorLinha-1][contadorColuna] == regras.getVaiMorrer())) {
@@ -106,7 +128,4 @@ public class Conway {
         if(contadorColuna - 1 >= 0 && (tabuleiro[contadorLinha][contadorColuna-1] == 1 || tabuleiro[contadorLinha][contadorColuna-1] == regras.getVaiMorrer())) {
             contagemCasasVizinhas++;
         }
-
-        return contagemCasasVizinhas;
-    }
-}
+*/
